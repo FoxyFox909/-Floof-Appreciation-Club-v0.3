@@ -1,7 +1,9 @@
 
 var foxArray = [];
 var storedBG = [];
+var tableList = [];
 var t = 0;
+
 
 
 //fetches data and saves it to global variable foxArray
@@ -9,13 +11,40 @@ async function getApi(url) {
 	const response = await fetch(url);
 	var data = await response.json();
 	//console.log(data);
-	console.log('foxes fetched');
+	console.log('data from ' + url + ' fetched');
 	return data;
 }
 
 function delTable() {
 	const del = document.getElementById('GeneratedTable-' + (t))
 	del.remove();
+}
+
+//Gathers index of tables with their ids and resource locations and starts table printing process
+async function test() {
+	
+	var data = await getApi('data/table-list.json');
+	tableList = data;
+	tableStart();
+}
+
+//calls the printTable function for each table that was fetched by test
+function tableStart() {
+	
+	var length = tableList.length;
+	//const tl = tableList[i];
+	
+	console.log("calling genTable " + length + " times.");
+	for (let i = 0; i < length; i++) {
+		
+		var url = "data/" + tableList[i]['filename'] + ".json";
+		var elementId = tableList[i]['element'];
+		var tableId = tableList[i]['id'];		
+		//console.log(url + ' ' + elementId + ' ' + tableId);
+		genTable(url, elementId, tableId);
+		
+	}
+
 }
 
 
@@ -32,7 +61,7 @@ function hideTab() {
 
 
 function changeButton() {
-	const getButton = document.getElementById("switch-button")
+	const getButton = document.getElementById("switch-button");
 	const getTabSection = document.getElementById("table-section");
 	
 	getTabSection.classList.toggle("fade");
@@ -44,50 +73,46 @@ function changeButton() {
 function mainTables() {
 	
 	setTimeout(genTable('data/table-0.json','showFoxes'), 5);
-	//setTimeout(t++, 10);
-	setTimeout(genTable('data/table-1.json', 'showPlanets'), 15);
+	setTimeout(genTable('data/table-1.json', 'showPlanets'), 10);
 	
 }
 
 
-async function genTable(url, tableElementId) {
-	//let data = null;
+async function genTable(url, tableElementId, tableId) {
 	var data = await getApi(url);
+	console.log('genTable says ' + url + ' ' + tableElementId + ' ' + tableId)
 	foxArray = data;
 	//console.log(data);
 	console.log('data written');
-	printTable(tableElementId);
+	printTable(tableElementId, tableId);
+	
 }
 
-
-//Print the saved array, debugging function
-function printJSON() {
-	console.log(foxArray.length);
-}
 
 var col = [];
 
 //The function responsible for building the table and appending it to the empty HTML element tha receives it
-function printTable(tableElementId) {
+function printTable(tableElementId, tableId) {
 	var length = foxArray.length;
 	var headerLength = --length;
+	let divShowFoxes = document.getElementById(tableElementId);
 	
 	//get data out of foxArray for table header
 	for (let i = 0; i < length; i++) {
 		for (let key in foxArray[(i + headerLength)]) {
 		col.push(key);
-		console.log(key);
+		//console.log(key);
 		}	
 	}
 	
 	//console.log(col);
 	const createTable = document.createElement('table');
-	createTable.setAttribute('id', 'GeneratedTable-'+ t);
+	createTable.setAttribute('id', 'GeneratedTable-' + tableId + '-' + t);
 
 	const tr = createTable.insertRow(-1);
 
 	//Build the header for the table with common name, scientific name, and thumbnail
-	console.log('creating table')
+	console.log('creating table with parameters ' + tableElementId + ' ' + tableId)
 	for (let i = 0; i < col.length; i++) {
 		let th = document.createElement("th");
 		th.innerHTML = col[i];
@@ -109,17 +134,17 @@ function printTable(tableElementId) {
 	//thumbnail column handler	
 	setTimeout(() => {
 		for (let b = 0; b < rowLength; b++) {
-			let genTable = document.getElementById('GeneratedTable-' + t);
+			let genTable = document.getElementById('GeneratedTable-' + tableId + '-' + t);
 			let newImg = document.createElement('img');
 			let newButton = document.createElement('button');
 			
 			
 			//Create image element to be appended later
-			console.log(rowLength);
+			//console.log(rowLength);
 			newImg.src=foxArray[b]['thumbnail'];
 			newImg.setAttribute('id', ('fox-image-' + b));
 			newImg.setAttribute('class', 'fox-thumbs');
-			console.log(foxArray[b]['thumbnail']);
+			//console.log(foxArray[b]['thumbnail']);
 			
 			newButton.setAttribute('id', ('fox-button-' + b));
 			newButton.setAttribute('class', 'fox-buttons');
@@ -143,12 +168,11 @@ function printTable(tableElementId) {
 	//console.log(foxArray[1]['thumbnail']);
 
 	//Actually put the newly-created table into a container elemtn
-	const divShowFoxes = document.getElementById(tableElementId);
 	divShowFoxes.innerHTML = "";
 	divShowFoxes.appendChild(createTable);
 	
 	setTimeout( () => {
-			t++;
+			//t++;
 			col = [];
 			}, '10')
 	

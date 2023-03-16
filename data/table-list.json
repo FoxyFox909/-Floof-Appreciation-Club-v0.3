@@ -1,0 +1,12 @@
+[	
+	{
+		"filename": "table-0",
+		"element": "showFoxes",
+		"id": "Foxtable"
+	},
+	{
+		"filename": "table-1",
+		"element": "showPlanets",
+		"id": "Planettable"
+	}
+]
