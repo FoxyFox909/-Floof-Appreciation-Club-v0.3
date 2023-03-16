@@ -1,0 +1,32 @@
+[	
+	{
+		"common name": "Red Fox",
+		"scientific name": "Vulpes vulpes",
+		"thumbnail": "assets/images/red_fox.jpg"
+	},
+	{
+		"common name": "Snow Fox",
+		"scientific name": "Vulpes lagopus",
+		"thumbnail": "assets/images/arctic_fox.jpg"
+	},
+	{
+		"common name": "Island Fox",
+		"scientific name": "Urocyon",
+		"thumbnail": "assets/images/island_fox.jpg"
+	},
+	{
+		"common name": "Bat-eared Fox",
+		"scientific name": "Otocyon",
+		"thumbnail": "assets/images/bat-eared_fox.jpg"
+	},
+	{
+		"common name": "Fennec Fox",
+		"scientific name": "Vulpes zerda",
+		"thumbnail": "assets/images/fennec_fox.jpg"
+	},
+	{
+		"common name": "Minecraft Fox",
+		"scientific name": "Minecrafto Foxxo",
+		"thumbnail": "assets/images/minecraft_fox.jpg"
+	}
+]
